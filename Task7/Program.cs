@@ -10,38 +10,21 @@ namespace Task7
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Сгенерировать все размещения из N элементов по K без повторений и выписать их в " +
+                              "лексикографическом порядке.\n");
             while (true) {
-                try
+
+                int N = readInt("Введите N", x => x > 0, "N должно быть больше 0!");
+                int K = readInt("Введите K", x => x > 0, "K должно быть больше 0!");
+
+
+                if (K > N)
                 {
-                    Console.Write("Введите N: ");
-                    int N = int.Parse(Console.ReadLine());
-
-                    if (N < 1)
-                    {
-                        Console.WriteLine("N должно быть больше 0!");
-                        continue;
-                    }
-
-                    Console.Write("Введите K: ");
-                    int K = int.Parse(Console.ReadLine());
-
-                    if (K < 1)
-                    {
-                        Console.WriteLine("K должно быть больше 0!");
-                        continue;
-                    }
-                    if (K > N)
-                    {
-                        Console.WriteLine("K не может быть больше чем N!");
-                        continue;
-                    }
-
-                    WriteCombination1(K, generateChars(N));
+                    Console.WriteLine("K не может быть больше чем N!");
+                    continue;
                 }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Ожидалось натуральное число");
-                }
+
+                WriteCombination1(K, generateChars(N));
             }
         }
 
@@ -67,6 +50,39 @@ namespace Task7
                 temp.Add((char)(i+65));
             }
             return temp;
+        }
+
+        static int readInt(string msg, Func<int, bool> filter, string errFilter)
+        {
+            int n = 0;
+            bool ok = true;
+
+            do
+            {
+                try
+                {
+                    Console.Write("{0}: ", msg);
+                    n = Int32.Parse(Console.ReadLine());
+                    if (!filter(n))
+                    {
+                        Console.WriteLine(errFilter);
+                        ok = false;
+                    }
+                    else
+                        ok = true;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Введите число");
+                    ok = false;
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Вы ввели слишком большое число");
+                    ok = false;
+                }
+            } while (!ok);
+            return n;
         }
     }
 }
